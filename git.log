@@ -1,0 +1,105 @@
+commit 8cf8340a550457f4290f18c81d34a76a0b7072af
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Sun Jan 1 00:00:00 2006 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Sun Jan 1 00:00:00 2006 +0900
+
+    reinit
+
+diff --git a/sub1/readme.txt b/sub1/readme.txt
+index ce01362..31e0fce 100644
+--- a/sub1/readme.txt
++++ b/sub1/readme.txt
+@@ -1 +1 @@
+-hello
++helloworld
+
+commit 6e37bc26748acfd636078ec574bd94dfded2d3d9
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Sat Jan 1 00:00:00 2005 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Sat Jan 1 00:00:00 2005 +0900
+
+    edit sub1
+
+diff --git a/sub1/readme.txt b/sub1/readme.txt
+index e69de29..ce01362 100644
+--- a/sub1/readme.txt
++++ b/sub1/readme.txt
+@@ -0,0 +1 @@
++hello
+
+commit d4621d963743cdd5a0a42ae8bd2decb7a0e9faee
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Thu Jan 1 00:00:00 2004 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Thu Jan 1 00:00:00 2004 +0900
+
+    edit sub2
+
+diff --git a/sub2/readme.txt b/sub2/readme.txt
+index e69de29..cc628cc 100644
+--- a/sub2/readme.txt
++++ b/sub2/readme.txt
+@@ -0,0 +1 @@
++world
+
+commit b7458bb95244b8b012e89d726ec042c071cbed27
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Thu Jan 2 00:00:00 2003 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Thu Jan 2 00:00:00 2003 +0900
+
+    sub1 add 2
+
+diff --git a/sub1/readme2.txt b/sub1/readme2.txt
+new file mode 100644
+index 0000000..e69de29
+
+commit 92e07cb9ae4c980f901159295ee751ecf51ff3d9
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Wed Jan 1 00:00:00 2003 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Wed Jan 1 00:00:00 2003 +0900
+
+    sub1 initial
+
+diff --git a/sub1/readme.txt b/sub1/readme.txt
+new file mode 100644
+index 0000000..e69de29
+
+commit 2eb747d6a14cbbb223d651ffba30967f4f13babb
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Sat Jun 1 00:00:00 2002 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Sat Jun 1 00:00:00 2002 +0900
+
+    sub2 add 2
+
+diff --git a/sub2/readme2.txt b/sub2/readme2.txt
+new file mode 100644
+index 0000000..e69de29
+
+commit 8a38ca8c78fc26511ae1a79b87eeaa4d3c2f8edf
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Tue Jan 1 00:00:00 2002 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Tue Jan 1 00:00:00 2002 +0900
+
+    sub2 initial
+
+diff --git a/sub2/readme.txt b/sub2/readme.txt
+new file mode 100644
+index 0000000..e69de29
+
+commit c512dfd1ddd96df514fb1c3acc572977acf6e038
+Author:     cielavenir <cielartisan@gmail.com>
+AuthorDate: Sat Jan 1 00:00:00 2000 +0900
+Commit:     cielavenir <cielartisan@gmail.com>
+CommitDate: Sat Jan 1 00:00:00 2000 +0900
+
+    root initial
+
+diff --git a/.root b/.root
+new file mode 100644
+index 0000000..e69de29
