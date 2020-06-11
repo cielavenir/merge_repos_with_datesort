@@ -1,4 +1,4 @@
-commit 8cf8340a550457f4290f18c81d34a76a0b7072af
+commit 1fa1071562b10be47302c527bcaa813c30f25c58
 Author:     cielavenir <cielartisan@gmail.com>
 AuthorDate: Sun Jan 1 00:00:00 2006 +0900
 Commit:     cielavenir <cielartisan@gmail.com>
@@ -14,7 +14,7 @@ index ce01362..31e0fce 100644
 -hello
 +helloworld
 
-commit 6e37bc26748acfd636078ec574bd94dfded2d3d9
+commit 29b25993afa23b8c46f08010b4a069c01caac890
 Author:     cielavenir <cielartisan@gmail.com>
 AuthorDate: Sat Jan 1 00:00:00 2005 +0900
 Commit:     cielavenir <cielartisan@gmail.com>
@@ -23,13 +23,14 @@ CommitDate: Sat Jan 1 00:00:00 2005 +0900
     edit sub1
 
 diff --git a/sub1/readme.txt b/sub1/readme.txt
-index e69de29..ce01362 100644
+index 423511b..ce01362 100644
 --- a/sub1/readme.txt
 +++ b/sub1/readme.txt
-@@ -0,0 +1 @@
+@@ -1 +1 @@
+-yaaaa
 +hello
 
-commit d4621d963743cdd5a0a42ae8bd2decb7a0e9faee
+commit 67d47636433b413cdd123ac5aafde1dc6890479f
 Author:     cielavenir <cielartisan@gmail.com>
 AuthorDate: Thu Jan 1 00:00:00 2004 +0900
 Commit:     cielavenir <cielartisan@gmail.com>
@@ -38,13 +39,14 @@ CommitDate: Thu Jan 1 00:00:00 2004 +0900
     edit sub2
 
 diff --git a/sub2/readme.txt b/sub2/readme.txt
-index e69de29..cc628cc 100644
+index 423511b..cc628cc 100644
 --- a/sub2/readme.txt
 +++ b/sub2/readme.txt
-@@ -0,0 +1 @@
+@@ -1 +1 @@
+-yaaaa
 +world
 
-commit b7458bb95244b8b012e89d726ec042c071cbed27
+commit 5e7945df13ecd1be4d99c098b5e7ba9af462b417
 Author:     cielavenir <cielartisan@gmail.com>
 AuthorDate: Thu Jan 2 00:00:00 2003 +0900
 Commit:     cielavenir <cielartisan@gmail.com>
@@ -56,7 +58,7 @@ diff --git a/sub1/readme2.txt b/sub1/readme2.txt
 new file mode 100644
 index 0000000..e69de29
 
-commit 92e07cb9ae4c980f901159295ee751ecf51ff3d9
+commit 9d0c16f17a864917c0f9e18dd2773714b004b17a
 Author:     cielavenir <cielartisan@gmail.com>
 AuthorDate: Wed Jan 1 00:00:00 2003 +0900
 Commit:     cielavenir <cielartisan@gmail.com>
@@ -66,21 +68,13 @@ CommitDate: Wed Jan 1 00:00:00 2003 +0900
 
 diff --git a/sub1/readme.txt b/sub1/readme.txt
 new file mode 100644
-index 0000000..e69de29
+index 0000000..423511b
+--- /dev/null
++++ b/sub1/readme.txt
+@@ -0,0 +1 @@
++yaaaa
 
-commit 2eb747d6a14cbbb223d651ffba30967f4f13babb
-Author:     cielavenir <cielartisan@gmail.com>
-AuthorDate: Sat Jun 1 00:00:00 2002 +0900
-Commit:     cielavenir <cielartisan@gmail.com>
-CommitDate: Sat Jun 1 00:00:00 2002 +0900
-
-    sub2 add 2
-
-diff --git a/sub2/readme2.txt b/sub2/readme2.txt
-new file mode 100644
-index 0000000..e69de29
-
-commit 8a38ca8c78fc26511ae1a79b87eeaa4d3c2f8edf
+commit 17947f5206f8af9820dae0fa28bda5b245bd0232
 Author:     cielavenir <cielartisan@gmail.com>
 AuthorDate: Tue Jan 1 00:00:00 2002 +0900
 Commit:     cielavenir <cielartisan@gmail.com>
@@ -90,7 +84,11 @@ CommitDate: Tue Jan 1 00:00:00 2002 +0900
 
 diff --git a/sub2/readme.txt b/sub2/readme.txt
 new file mode 100644
-index 0000000..e69de29
+index 0000000..423511b
+--- /dev/null
++++ b/sub2/readme.txt
+@@ -0,0 +1 @@
++yaaaa
 
 commit c512dfd1ddd96df514fb1c3acc572977acf6e038
 Author:     cielavenir <cielartisan@gmail.com>
