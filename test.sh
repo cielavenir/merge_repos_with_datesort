@@ -133,7 +133,7 @@ fi
 
 mkdir dirsub1
 git -C dirsub1 init
-touch dirsub1/readme.txt
+echo yaaaa > dirsub1/readme.txt
 git -C dirsub1 add readme.txt
 git -C dirsub1 commit --date='2003-01-01 00:00:00' -m 'sub1 initial'
 touch dirsub1/readme2.txt
@@ -142,12 +142,9 @@ git -C dirsub1 commit --date='2003-01-02 00:00:00' -m 'sub1 add 2'
 
 mkdir dirsub2
 git -C dirsub2 init
-touch dirsub2/readme.txt
+echo yaaaa > dirsub2/readme.txt
 git -C dirsub2 add readme.txt
 git -C dirsub2 commit --date='2002-01-01 00:00:00' -m 'sub2 initial'
-touch dirsub2/readme2.txt
-git -C dirsub2 add readme2.txt
-git -C dirsub2 commit --date='2002-06-01 00:00:00' -m 'sub2 add 2'
 
 ### case1: creating
 # * サブリポジトリを直接編集することはできないので、一旦メインリポジトリの勝手ブランチにcherry-pickする。その土台(__tmp/master)は、適当な古い日付のリポジトリを作成し、それをremote addすることで得られる。 *
