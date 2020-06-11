@@ -62,7 +62,7 @@ elif [ "$nhashesalready" -eq 1 ]; then
     # * __tmp/masterの下にこれをつなげることで、「2個前のコミット」が存在している状態にできる。 *
     git -C "${dirroot}" checkout __tmp/master
     git -C "${dirroot}" checkout -b tmpmaster
-    test ${hashesnewtail} != ${hashesnewhead}
+    git -C "${dirroot}" rev-parse ${hashesnewtail}^ > /dev/null # test existence
     git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}^
     git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}^..${hashesnewhead}
     # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
@@ -74,8 +74,8 @@ export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 ' __tmp/master..tmpmaster
     git -C "${dirroot}" checkout master
     # * __tmp/masterの2つ下以降をchery-pickする *
-    derived_hashes=$(git -C "${dirroot}" log --reverse --pretty=format:%H --ancestry-path __tmp/master..tmpmaster)
-    cherrypick_root_excluding=$(<<<${derived_hashes} head -1)
+    local derived_hashes=$(git -C "${dirroot}" log --reverse --pretty=format:%H --ancestry-path __tmp/master..tmpmaster)
+    local cherrypick_root_excluding=$(<<<${derived_hashes} head -1)
     git -C "${dirroot}" cherry-pick --strategy-option=theirs --allow-empty --allow-empty-message --keep-redundant-commits ${cherrypick_root_excluding}..tmpmaster
     git -C "${dirroot}" branch -D tmpmaster
 else
@@ -97,8 +97,8 @@ export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
     # * この時点でhashesnewtailの1つ前以降が書き換わっているので、hashesnewtailの2つ前の次の次からcherry-pickすれば良い *
     # * hashesnewtail自体はtmpmasterブランチに存在しないことに注意 *
     git -C "${dirroot}" checkout master
-    derived_hashes=$(git -C "${dirroot}" log --reverse --pretty=format:%H --ancestry-path ${hashesnewtail}^^..tmpmaster)
-    cherrypick_root_excluding=$(<<<${derived_hashes} head -1)
+    local derived_hashes=$(git -C "${dirroot}" log --reverse --pretty=format:%H --ancestry-path ${hashesnewtail}^^..tmpmaster)
+    local cherrypick_root_excluding=$(<<<${derived_hashes} head -1)
     git -C "${dirroot}" cherry-pick --strategy-option=theirs --allow-empty --allow-empty-message --keep-redundant-commits ${cherrypick_root_excluding}..tmpmaster
     git -C "${dirroot}" branch -D tmpmaster
 fi
