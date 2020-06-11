@@ -14,16 +14,16 @@ function commit () {
 local hashes=$(git -C "${dirroot}" log --pretty=format:%H "${sub}"/master)
 # * 処理開始時点でのコミット時刻以前のコミットを取得する *
 #local hashsynced=$(git -C "${dirroot}" log --pretty=format:%H --before="$headtime" ${sub}/master | head -1)
-local hashsynced=$(git -C "${dirroot}" log --pretty='format:%at %H' "${sub}"/master | awk '$1<='$headtime | head -1 | cut '-d ' -f2)
+local hashsynced=$(git -C "${dirroot}" log --pretty='format:%at %H' "${sub}"/master | awk '$1<='${headtime} | head -1 | cut '-d ' -f2)
 # * hashsynced以前のコミット一覧を取得する *
 local hashesalready=""
 if [ -n "${hashsynced}" ]; then
     local hashesalready=$(git -C "${dirroot}" log --pretty=format:%H "${hashsynced}")
 fi
-local nhashes=$(<<<${hashes} sed '/^$/d'|wc -l)
-local nhashesalready=$(<<<${hashesalready} sed '/^$/d'|wc -l)
+local nhashes=$(<<<"${hashes}" sed '/^$/d'|wc -l)
+local nhashesalready=$(<<<"${hashesalready}" sed '/^$/d'|wc -l)
 local nhashesnew=$((${nhashes}-${nhashesalready}))
-local hashesnew=$(<<<${hashes} sed '/^$/d'|head -n ${nhashesnew})
+local hashesnew=$(<<<"${hashes}" sed '/^$/d'|head -n ${nhashesnew})
 
 if [ "$nhashesnew" -eq 0 ]; then
     echo '[.] nothing new to import.'
@@ -31,20 +31,20 @@ if [ "$nhashesnew" -eq 0 ]; then
 fi
 
 # * 新たに結合するハッシュの最新 *
-local hashesnewhead=$(<<<${hashesnew} head -n 1)
+local hashesnewhead=$(<<<"${hashesnew}" head -n 1)
 # * 新たに結合するハッシュの最古 *
-local hashesnewtail=$(<<<${hashesnew} tail -n 1)
+local hashesnewtail=$(<<<"${hashesnew}" tail -n 1)
 
 if [ "$nhashesalready" -eq 0 ]; then
     echo '[.] initial import.'
     git -C "${dirroot}" checkout __tmp/master
     git -C "${dirroot}" checkout -b tmpmaster
     # * 強制的にコミットを採用したいので、--allow-empty --allow-empty-message --keep-redundant-commitsとする *
-    git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}
-    if [ "$nhashesnew" -ge 2 ]; then
+    git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits "${hashesnewtail}"
+    if [ "${nhashesnew}" -ge 2 ]; then
         # * cherry-pickでA..Bと指定すると、「Aの直後からBまで」を順番にcherry-pickする意味になる *
         # * A^..Bとすれば「Aを含めてBまで」とできるが、Aがroot commitの場合は不可 *
-        git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}..${hashesnewhead}
+        git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits "${hashesnewtail}..${hashesnewhead}"
     fi
     # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
     ### this env-filter quote must be single. ###
@@ -82,7 +82,7 @@ git -C "${dirroot}" config rebase.instructionFormat '%at %H'
 # * 第一引数で示されるテキストファイルを編集し再保存するという仕様である。 *
 # * これはsort -n -k3とspongeコマンドで実現できる。 *
 # * 結合前のheadより後に対し処理を行うようにする。 *
-GIT_SEQUENCE_EDITOR='sort -n -k3 $1|sponge $1' git -C "${dirroot}" rebase -i $head
+GIT_SEQUENCE_EDITOR='sort -n -k3 $1|sponge $1' git -C "${dirroot}" rebase -i ${head}
 # * 結合前のheadより後が日付順に並び替えられたが、commiter dataが書き換わってしまったため、author dataで再度上書きする。 *
 git -C "${dirroot}" filter-branch -f --env-filter '
 export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
