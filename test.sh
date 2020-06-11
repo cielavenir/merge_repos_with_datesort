@@ -57,20 +57,50 @@ export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
     # * リポジトリが再生成された場合でも、--strategy-option=theirsとすればcherry-pickできる *
     git -C "${dirroot}" cherry-pick --strategy-option=theirs --allow-empty --allow-empty-message --keep-redundant-commits __tmp/master..tmpmaster
     git -C "${dirroot}" branch -D tmpmaster
+elif [ "$nhashesalready" -eq 1 ]; then
+    echo '[.] cascading import (depth 1).'
+    # * 後述の理由により2個前のコミットが必要だが、既にcherry-pickされているコミットは1個のみである。この1個とは(当該リポジトリの)rootである。 *
+    # * __tmp/masterの下にこれをつなげることで、「2個前のコミット」が存在している状態にできる。 *
+    git -C "${dirroot}" checkout __tmp/master
+    git -C "${dirroot}" checkout -b tmpmaster
+    test ${hashesnewtail} != ${hashesnewhead}
+    git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}^
+    git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}^..${hashesnewhead}
+    # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
+    ### this env-filter quote must be single. ###
+    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir '${sub}' && git mv -k * .gitignore '${sub}'/" --env-filter '
+export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+' __tmp/master..tmpmaster
+    git -C "${dirroot}" checkout master
+    # * __tmp/masterの2つ下以降をchery-pickする *
+    derived_hashes=$(git -C "${dirroot}" log --reverse --pretty=format:%H --ancestry-path __tmp/master..tmpmaster)
+    cherrypick_root_excluding=$(<<<${derived_hashes} head -1)
+    git -C "${dirroot}" cherry-pick --strategy-option=theirs --allow-empty --allow-empty-message --keep-redundant-commits ${cherrypick_root_excluding}..tmpmaster
+    git -C "${dirroot}" branch -D tmpmaster
 else
     echo '[.] cascading import.'
     git -C "${dirroot}" checkout "${sub}"/master
     git -C "${dirroot}" checkout -b tmpmaster
     # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
-    # * hashesnewtailを含めて、hashesnewtailから先頭までをcherry-pickする *
+    # * hashesnewtailを含めて、hashesnewtailから先頭までをcherry-pickしたい *
+    # * が、hashesnewtailにrenameコミットが入っていると、 *
+    # * ファイルの内容によってはdelete/addコミットになってしまい、cherry-pickに失敗してしまう。 *
+    # * さらに1個前からfilter-branchしなければならない。 *
+    # * あるhashの次という指定が必要なため、1個前を指定するには「2個前(の次)」という指定が必要である。 *
     ### this quote must be single. ###
     git -C "${dirroot}" filter-branch -f --tree-filter "mkdir '${sub}' && git mv -k * .gitignore '${sub}'/" --env-filter '
 export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
-' ${hashesnewtail}^..tmpmaster
+' ${hashesnewtail}^^..tmpmaster
+    # * この時点でhashesnewtailの1つ前以降が書き換わっているので、hashesnewtailの2つ前の次の次からcherry-pickすれば良い *
+    # * hashesnewtail自体はtmpmasterブランチに存在しないことに注意 *
     git -C "${dirroot}" checkout master
-    git -C "${dirroot}" cherry-pick --strategy-option=theirs --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}^..tmpmaster
+    derived_hashes=$(git -C "${dirroot}" log --reverse --pretty=format:%H --ancestry-path ${hashesnewtail}^^..tmpmaster)
+    cherrypick_root_excluding=$(<<<${derived_hashes} head -1)
+    git -C "${dirroot}" cherry-pick --strategy-option=theirs --allow-empty --allow-empty-message --keep-redundant-commits ${cherrypick_root_excluding}..tmpmaster
     git -C "${dirroot}" branch -D tmpmaster
 fi
 }
