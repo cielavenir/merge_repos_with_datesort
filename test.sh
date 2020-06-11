@@ -1,13 +1,12 @@
 #!/bin/bash
+set -e
 export FILTER_BRANCH_SQUELCH_WARNING=1
 
-set -e
 # apt-get needs to success
 if ! which sponge >/dev/null; then
     echo 'need to install `sponge` to sort commits in-place, which is in `moreutils` package.'
     sudo apt-get -y install moreutils
 fi
-set +e
 
 function commit () {
 ### headtime should be unix-int ###
@@ -164,10 +163,12 @@ if ! git -C "${dirroot}" remote show | grep __tmp > /dev/null; then
     rm -rf dirtmp
 fi
 
+set +e
 git -C "${dirroot}" remote add sub1 ../dirsub1 || true
 git -C "${dirroot}" remote add sub2 ../dirsub2 || true
 git -C "${dirroot}" fetch sub1
 git -C "${dirroot}" fetch sub2
+set -e
 
 head=$(git -C "${dirroot}" rev-parse master)
 headtime=$(git -C "${dirroot}" log --pretty=format:%ct ${head}|head -1|cut '-d ' -f1,2)
@@ -186,10 +187,12 @@ git -C dirsub2 add readme.txt
 git -C dirsub2 commit --date='2004-01-01 00:00:00' -m 'edit sub2'
 
 ### case2: adding
+set +e
 git -C "${dirroot}" remote add sub1 ../dirsub1 || true
 git -C "${dirroot}" remote add sub2 ../dirsub2 || true
 git -C "${dirroot}" fetch sub1
 git -C "${dirroot}" fetch sub2
+set -e
 
 head=$(git -C "${dirroot}" rev-parse master)
 headtime=$(git -C "${dirroot}" log --pretty=format:%ct ${head}|head -1|cut '-d ' -f1,2)
@@ -209,10 +212,12 @@ git -C dirsub1 add readme.txt
 git -C dirsub1 commit --date='2006-01-01 00:00:00' -m 'reinit'
 
 ### case3: reinit
+set +e
 git -C "${dirroot}" remote add sub1 ../dirsub1 || true
 git -C "${dirroot}" remote add sub2 ../dirsub2 || true
 git -C "${dirroot}" fetch sub1
 git -C "${dirroot}" fetch sub2
+set -e
 
 head=$(git -C "${dirroot}" rev-parse master)
 headtime=$(git -C "${dirroot}" log --pretty=format:%ct ${head}|head -1|cut '-d ' -f1,2)
