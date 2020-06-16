@@ -109,9 +109,9 @@ function sortByAuthorDate () {
 git -C "${dirroot}" config rebase.instructionFormat '%at %H'
 # * rebase -iのエディタはGIT_SEQUENCE_EDITORで指定できる。 *
 # * 第一引数で示されるテキストファイルを編集し再保存するという仕様である。 *
-# * これはsort -n -k3とspongeコマンドで実現できる。 *
+# * これはsort -s -n -k3とspongeコマンドで実現できる(安定ソートが必要なため-sは必須)。 *
 # * 結合前のheadより後に対し処理を行うようにする。 *
-GIT_SEQUENCE_EDITOR='sort -n -k3 $1|sponge $1' git -C "${dirroot}" rebase -i ${head}
+GIT_SEQUENCE_EDITOR='sort -s -n -k3 $1|sponge $1' git -C "${dirroot}" rebase -i ${head}
 # * 結合前のheadより後が日付順に並び替えられたが、commiter dataが書き換わってしまったため、author dataで再度上書きする。 *
 git -C "${dirroot}" filter-branch -f --env-filter '
 export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
