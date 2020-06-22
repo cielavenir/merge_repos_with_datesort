@@ -10,10 +10,10 @@ fi
 
 function commit () {
 ### headtime should be unix-int ###
-local hashes=$(git -C "${dirroot}" log --pretty=format:%H "${sub}"/master)
+local hashes=$(git -C "${dirroot}" log --pretty=format:%H remotes/"${sub}"/master)
 # * 処理開始時点でのコミット時刻以前のコミットを取得する *
-#local hashsynced=$(git -C "${dirroot}" log --pretty=format:%H --before="$headtime" ${sub}/master | head -1)
-local hashsynced=$(git -C "${dirroot}" log --pretty='format:%at %H' "${sub}"/master | awk '$1<='${headtime} | head -1 | cut '-d ' -f2)
+#local hashsynced=$(git -C "${dirroot}" log --pretty=format:%H --before="$headtime" remotes/"${sub}"/master | head -1)
+local hashsynced=$(git -C "${dirroot}" log --pretty='format:%at %H' remotes/"${sub}"/master | awk '$1<='${headtime} | head -1 | cut '-d ' -f2)
 # * hashsynced以前のコミット一覧を取得する *
 local hashesalready=""
 if [ -n "${hashsynced}" ]; then
@@ -47,7 +47,7 @@ if [ "$nhashesalready" -eq 0 ]; then
     fi
     # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
     ### this env-filter quote must be single. ###
-    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir '${sub}' && git mv -k * .gitignore '${sub}'/" --env-filter '
+    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir -- '${sub}' && git mv -k -- * .gitignore '${sub}'/" --env-filter '
 export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
@@ -67,7 +67,7 @@ elif [ "$nhashesalready" -eq 1 ]; then
     git -C "${dirroot}" cherry-pick --allow-empty --allow-empty-message --keep-redundant-commits ${hashesnewtail}^..${hashesnewhead}
     # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
     ### this env-filter quote must be single. ###
-    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir '${sub}' && git mv -k * .gitignore '${sub}'/" --env-filter '
+    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir -- '${sub}' && git mv -k -- * .gitignore '${sub}'/" --env-filter '
 export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
@@ -80,7 +80,7 @@ export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
     git -C "${dirroot}" branch -D tmpmaster
 else
     echo '[.] cascading import.'
-    git -C "${dirroot}" checkout "${sub}"/master
+    git -C "${dirroot}" checkout remotes/"${sub}"/master
     git -C "${dirroot}" checkout -b tmpmaster
     # * ファイルをサブディレクトリに移動するが、committer dataはauthor dataとする *
     # * hashesnewtailを含めて、hashesnewtailから先頭までをcherry-pickしたい *
@@ -89,7 +89,7 @@ else
     # * さらに1個前からfilter-branchしなければならない。 *
     # * あるhashの次という指定が必要なため、1個前を指定するには「2個前(の次)」という指定が必要である。 *
     ### this quote must be single. ###
-    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir '${sub}' && git mv -k * .gitignore '${sub}'/" --env-filter '
+    git -C "${dirroot}" filter-branch -f --tree-filter "mkdir -- '${sub}' && git mv -k -- * .gitignore '${sub}'/" --env-filter '
 export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
